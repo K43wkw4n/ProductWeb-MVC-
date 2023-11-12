@@ -1,0 +1,109 @@
+﻿@model ProductVM
+
+@{
+    var id = Model.Product.Id;
+    var title = (id == 0) ? "Create" : "Update";
+    var bgCss = (id == 0) ? "bg-info" : "bg-warning";
+}
+
+<div class="row text-black">
+    <div class="row bg-primary p-1 mb-2">
+        <div class="col-6 m-auto text-dark">@title</div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-warning" asp-action="Index">
+                @*<i class="bi bi-plus-circle-fill"></i>*@
+                <i class="bi bi-backspace-reverse"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <form class="border rounded p-2 bg-success" method="post" enctype="multipart/form-data">            
+                <input asp-for="Product.Id" hidden/>
+                <input asp-for="Product.ImageUrl" hidden/>
+                <div class="mb-3">
+                    <label asp-for="Product.Name" class="form-label"></label>
+                    <input asp-for="Product.Name" class="form-control">
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.Description" class="form-label"></label>
+                    @*<input asp-for="Product.Description" class="form-control">*@
+                    <textarea id="mytextarea" asp-for="Product.Description"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.Price" class="form-label"></label>
+                    <input asp-for="Product.Price" class="form-control">
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.ImageUrl" class="form-label"></label>
+                    <input name="file" type="file" accept="image/*" class="form-control"
+                           onchange="ShowImage(event)" id="UploadBox">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.CategoryId" class="form-label"></label>
+
+                    <select asp-for="Product.CategoryId" asp-items="Model.CategoryList" class="form-select" aria-label="Default select example">
+                        <option selected disabled>--select Category--</option>
+
+                    </select>
+
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+
+                @if (Model.Product.Id == 0)
+                {
+                    <button type="submit" class="btn btn-warning" onclick="return ValidateImage()">Save Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-danger">Save Update</button>
+                }
+
+            </form>
+        </div>
+        <div class="col-4 border rounded m-auto">
+            <img id="output" width="100%" class="rounded" src="@Model.Product.ImageUrl" />
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function ShowImage(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+        tinymce.init({
+            selector: '#mytextarea',
+            plugins: [
+                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+        });
+
+        function ValidateImage() {
+            if (document.getElementById("UploadBox").value == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                })
+                return false
+            }
+            return true
+        }
+
+    </script>
+}

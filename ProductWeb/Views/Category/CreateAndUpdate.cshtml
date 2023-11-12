@@ -1,0 +1,25 @@
+﻿@model Category
+
+<div class="col-6 m-auto">
+    <div class="row bg-primary p-1">
+        <div class="col-6 m-auto text-dark">Category List</div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-warning" asp-action="Index">
+                <i class="bi bi-backspace-reverse"></i>
+            </a>
+        </div>
+    </div>
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name"></label>
+            <input class="form-control" asp-for="Name">
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+    }

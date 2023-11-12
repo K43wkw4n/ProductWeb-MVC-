@@ -1,0 +1,54 @@
+﻿@model IEnumerable<OrderHeader>
+
+<div>
+    <div class="row bg-primary p-1">
+        <div class="col-6 text-dark">Order List</div>
+        
+    </div>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CustomerName</th>
+                <th>PaymentDate</th>
+                <th>OrderTotal</th>
+                <th>OrderStatus</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.PaymentDate</td>
+                    <td>@item.OrderTotal</td>
+                    <td>@item.OrderStatus</td>
+                    <td>
+                    <a class="btn btn-outline-success" asp-action="Detail"
+                   asp-route-id="@item.Id">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure')">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                    </td>
+                </tr>
+                
+            }
+
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+
+}
